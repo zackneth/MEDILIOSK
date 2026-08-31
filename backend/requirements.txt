@@ -1,0 +1,15 @@
+﻿fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+google-genai
+httpx
+PyYAML
+python-multipart
+Pillow
+fhir.resources
+pymupdf
+edge-tts
+reportlab
+

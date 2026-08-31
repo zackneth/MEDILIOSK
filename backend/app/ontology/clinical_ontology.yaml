@@ -1,0 +1,180 @@
+meta:
+  version: "0.1.0"
+  modes: ["allopathic"]
+  language: en
+
+sections:
+  - id: chief_complaint
+    title: Chief Complaint
+    entry_questions:
+      - id: cc_primary
+        text: "What is the main problem you are experiencing today?"
+        mcq_options:
+          - Chest pain
+          - Fever
+          - Headache
+          - Cough or cold
+          - Stomach pain
+          - Breathlessness
+          - Joint pain
+          - Dizziness
+          - Vomiting or nausea
+          - Injury or wound
+          - Other
+        free_text: true
+        red_flags:
+          - match_any: ["chest pain", "chest tightness", "seene mein dard"]
+            code: RF_CARDIAC_01
+            description: "Chest pain - possible acute coronary syndrome"
+            severity: emergency
+            triggers_followup: cc_cardiac_screen
+          - match_any: ["breathless", "shortness of breath", "saans"]
+            code: RF_RESP_01
+            description: "Breathlessness - possible respiratory/cardiac emergency"
+            severity: urgent
+            triggers_followup: cc_resp_screen
+          - match_regex: "(face droop|slurred speech|weakness on one side|sudden weakness)"
+            code: RF_STROKE_01
+            description: "Possible stroke symptoms (FAST)"
+            severity: emergency
+    followups:
+      - id: cc_duration
+        trigger_always: true
+        text: "Since how long have you had this problem?"
+        mcq_options: ["Less than 1 day", "1-3 days", "4-7 days", "1-4 weeks", "More than a month"]
+
+  - id: hpi_socrates
+    title: History of Present Illness
+    conditional_on: cc_primary
+    branches:
+      - when_contains: ["chest pain", "chest tightness"]
+        questions:
+          - id: soc_site
+            text: "Where exactly is the pain? Can you point to the area?"
+            free_text: true
+          - id: soc_onset
+            text: "Did it start suddenly or gradually?"
+            mcq_options: ["Sudden", "Gradual"]
+          - id: soc_character
+            text: "How does it feel - pressure, burning, sharp, or cramping?"
+            mcq_options: ["Pressure or heaviness", "Burning", "Sharp or stabbing", "Cramping"]
+          - id: soc_radiation
+            text: "Does the pain travel anywhere, like to your left arm, jaw, or back?"
+            mcq_options: ["Left arm", "Jaw or neck", "Back", "Nowhere else"]
+          - id: soc_aggravating
+            text: "Does anything make it worse - walking, breathing deeply, or eating?"
+            free_text: true
+          - id: soc_relieving
+            text: "Does anything relieve it - rest or medicines?"
+            free_text: true
+          - id: soc_timing
+            text: "Is it constant or does it come and go?"
+            mcq_options: ["Constant", "Comes and goes"]
+          - id: soc_severity
+            text: "On a scale of 1 to 10, how severe is it right now?"
+            mcq_options: ["1-3 mild", "4-6 moderate", "7-10 severe"]
+        red_flags:
+          - question_id: soc_radiation
+            match_any: ["left arm", "jaw"]
+            with_parent_match: ["pressure", "heaviness"]
+            code: RF_CARDIAC_02
+            description: "Radiating chest pain with pressure - high ACS suspicion"
+            severity: emergency
+      - when_contains: ["fever"]
+        questions:
+          - id: fever_temp
+            text: "Have you measured your temperature? How high was it?"
+            free_text: true
+          - id: fever_pattern
+            text: "Does the fever come at a particular time of day?"
+            mcq_options: ["Morning", "Evening", "Whole day", "Irregular"]
+          - id: fever_associated
+            text: "Do you also have chills, rash, body ache, or loose motions?"
+            free_text: true
+      - when_contains: ["headache"]
+        questions:
+          - id: ha_location
+            text: "Which part of the head hurts - front, back, sides, or all over?"
+            mcq_options: ["Front", "Back", "One side", "All over"]
+          - id: ha_quality
+            text: "Is it throbbing, pressing, or stabbing?"
+            mcq_options: ["Throbbing", "Pressing", "Stabbing"]
+          - id: ha_red
+            text: "Did it start very suddenly like a thunderclap, or with vomiting or vision problems?"
+            mcq_options: ["Yes sudden/vomiting/vision", "No"]
+            red_flags:
+              - match_any: ["yes"]
+                code: RF_NEURO_01
+                description: "Thunderclap headache with neuro symptoms - possible haemorrhage"
+                severity: emergency
+      - default:
+        questions:
+          - id: hpi_generic_course
+            text: "Can you describe how this problem has changed since it started?"
+            free_text: true
+          - id: hpi_generic_associated
+            text: "Are there any other symptoms along with it?"
+            free_text: true
+
+  - id: past_medical_surgical
+    title: Past Medical and Surgical History
+    questions:
+      - id: pmh_conditions
+        text: "Do you have diabetes, blood pressure, heart disease, asthma, or thyroid problems?"
+        mcq_options: ["Diabetes", "Blood pressure", "Heart disease", "Asthma", "Thyroid", "None of these"]
+        multi_select: true
+      - id: pmh_surgeries
+        text: "Have you had any operations or hospital admissions before?"
+        free_text: true
+      - id: pmh_medications
+        text: "Do you take any medicines regularly? Please name them if you remember."
+        free_text: true
+
+  - id: drug_allergy
+    title: Drug and Allergy History
+    questions:
+      - id: allergy_drugs
+        text: "Are you allergic to any medicine, food, or substance?"
+        free_text: true
+      - id: allergy_reaction
+        text: "What happens when you have that allergic reaction?"
+        free_text: true
+        conditional_on_answered: allergy_drugs
+
+  - id: family_history
+    title: Family History
+    questions:
+      - id: fh_diseases
+        text: "Do your parents or siblings have diabetes, blood pressure, heart disease, or cancer?"
+        mcq_options: ["Diabetes", "Blood pressure", "Heart disease", "Cancer", "None known"]
+
+  - id: personal_history
+    title: Personal History
+    questions:
+      - id: ph_diet
+        text: "Is your diet vegetarian or non-vegetarian?"
+        mcq_options: ["Vegetarian", "Non-vegetarian", "Mixed"]
+      - id: ph_smoking
+        text: "Do you smoke or use tobacco in any form?"
+        mcq_options: ["Yes currently", "Used to earlier", "Never"]
+      - id: ph_alcohol
+        text: "Do you consume alcohol?"
+        mcq_options: ["Yes regularly", "Occasionally", "Never"]
+      - id: ph_activity
+        text: "How would you describe your daily physical activity?"
+        mcq_options: ["Mostly sitting", "Moderately active", "Very active"]
+
+  - id: ros
+    title: Review of Systems
+    questions:
+      - id: ros_general
+        text: "Any weight loss, appetite loss, or tiredness lately?"
+        mcq_options: ["Weight loss", "Appetite loss", "Tiredness", "None of these"]
+        multi_select: true
+      - id: ros_gi
+        text: "Any problems with digestion, motion, or urination?"
+        free_text: true
+
+triage_rules:
+  - any_red_flag_severity: emergency
+    priority: priority

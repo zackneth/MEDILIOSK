@@ -1,0 +1,24 @@
+# secrets — NEVER commit
+backend/.env
+frontend/.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# node
+node_modules/
+
+# runtime data
+backend/sessions.json
+backend/archived_summaries.json
+backend/uploads/
+backend/static/
+backend/debug_*.py
+backend/test_*.py
+backend/setup_bey*.py
+backend/fix_url.py
+backend/make_test_img.py
+frontend/dist/

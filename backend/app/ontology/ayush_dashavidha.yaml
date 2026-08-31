@@ -1,0 +1,70 @@
+meta:
+  version: "0.1.0"
+  modes: ["ayush"]
+  language: en
+  reference: "Dashavidha Pariksha - tenfold Ayurvedic patient examination"
+
+sections:
+  - id: chief_complaint_ayush
+    title: Chief Complaint and Nidana
+    questions:
+      - id: ay_cc
+        text: "What is the main health problem you are facing today?"
+        free_text: true
+      - id: ay_nidana
+        text: "Do you feel anything specific triggered this problem - food, weather, stress, or exertion?"
+        free_text: true
+
+  - id: dashavidha
+    title: Dashavidha Pariksha
+    questions:
+      - id: d1_prakriti
+        text: "Since childhood, is your body build generally thin, medium, or heavy? Is your skin usually dry, warm, or oily?"
+        mcq_options: ["Thin and dry built", "Medium and warm built", "Heavy and oily built", "Mixed"]
+      - id: d2_vikriti
+        text: "Right now do you feel more of gas-type complaints like bloating, heat-type like burning, or heaviness and coldness?"
+        mcq_options: ["Gas or bloating (Vata)", "Heat or burning (Pitta)", "Heaviness or cold (Kapha)", "Mixed"]
+      - id: d3_sara
+        text: "How would you rate your overall body strength - strong, moderate, or weak?"
+        mcq_options: ["Strong", "Moderate", "Weak"]
+      - id: d4_samhanana
+        text: "Are your joints and body compact and well-built, medium, or loose and light?"
+        mcq_options: ["Compact well-built", "Medium", "Loose and light"]
+      - id: d5_pramana
+        text: "How is your overall body proportion and height compared to others your age?"
+        mcq_options: ["Tall or large", "Average", "Small or thin"]
+      - id: d6_satmya
+        text: "What kind of food are you habituated to - spicy, bland, heavy, or light food? Any substance you cannot tolerate?"
+        free_text: true
+      - id: d7_sattva
+        text: "How is your mental strength - do you handle stress easily, moderately, or with great difficulty?"
+        mcq_options: ["Handle easily", "Moderate", "Great difficulty"]
+      - id: d8_ahara_shakti
+        text: "How is your hunger and digestion - strong digestion and good appetite, moderate, or weak with bloating?"
+        mcq_options: ["Strong appetite and digestion", "Moderate", "Weak with bloating"]
+      - id: d9_vyayama_shakti
+        text: "How much physical work or exercise can you do without getting tired?"
+        mcq_options: ["Heavy work easily", "Moderate work", "Gets tired quickly"]
+      - id: d10_vaya
+        text: "What is your age group - childhood up to 16, youth 16 to 50, or old age above 50?"
+        mcq_options: ["Childhood (up to 16)", "Youth (16-50)", "Old age (above 50)"]
+
+  - id: ahara_vihara
+    title: Ahara-Vihara Assessment
+    questions:
+      - id: av_diet_pattern
+        text: "What does a typical day of meals look like for you?"
+        free_text: true
+      - id: av_sleep
+        text: "How is your sleep - sound, disturbed, or excessive?"
+        mcq_options: ["Sound", "Disturbed", "Excessive"]
+      - id: av_bowel
+        text: "How is your bowel motion - regular, constipated, or loose?"
+        mcq_options: ["Regular", "Constipated", "Loose", "Irregular"]
+      - id: av_lifestyle
+        text: "Is your daily routine mostly sedentary work, physical labour, or mixed?"
+        mcq_options: ["Sedentary", "Physical labour", "Mixed"]
+
+triage_rules:
+  - any_red_flag_severity: emergency
+    priority: priority
