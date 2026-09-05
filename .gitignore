@@ -22,3 +22,6 @@ backend/setup_bey*.py
 backend/fix_url.py
 backend/make_test_img.py
 frontend/dist/
+
+# Local Netlify folder
+.netlify

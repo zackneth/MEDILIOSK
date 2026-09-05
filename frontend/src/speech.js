@@ -1,6 +1,7 @@
 import api from './api'
 
 let currentAudio = null
+let seq = 0 // latest speak() wins — older pending voices are dropped, never overlapped
 
 function playBuffer(buf) {
   return new Promise((resolve) => {
@@ -38,14 +39,18 @@ const Speech = {
   async speak(text, lang = 'en-IN') {
     if (!text) return
     stop() // Ensure only one voice at a time — prevents double speak
+    const my = ++seq
     const code = lang.split("-")[0].toLowerCase()
     try {
       const res = await api.post('/voice/tts', { text, lang: code }, { responseType: 'arraybuffer', timeout: 20000 })
+      if (my !== seq) return // a newer speak() took over — stay silent
       if (res.data && res.data.byteLength > 512) return playBuffer(res.data)
     } catch { /* Edge TTS unavailable - fall back to browser */ }
+    if (my !== seq) return // a newer speak() took over — stay silent
     return browserSpeak(text, lang)
   },
   stop() {
+    seq++ // invalidate any speak() still waiting on network
     if (currentAudio) {
       try { currentAudio.pause() } catch { /* already stopped */ }
       currentAudio = null

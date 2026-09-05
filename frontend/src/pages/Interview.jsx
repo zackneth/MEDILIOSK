@@ -6,6 +6,7 @@ import { Dictation } from '../speech'
 import Speech from '../speech'
 import { blobToWav } from '../wav'
 import VoiceChat from '../components/VoiceChat.jsx'
+import SignMode from '../components/SignMode.jsx'
 
 const AGENT_IDS_LANG = {
   en: import.meta.env.VITE_BEY_AGENT_ID_EN || import.meta.env.VITE_BEY_AGENT_ID || '',
@@ -254,6 +255,7 @@ function ModeChooser({ onPick }) {
   const modes = [
     { id:'video', Icon: IVideo, title:'Video Doctor', desc:'Face-to-face with your real-time AI physician. Camera + mic required.', badge:'Recommended', accent: 'var(--color-primary)' },
     { id:'chat', Icon: IMic, title:'Voice Conversation', desc:'Just talk naturally — the doctor listens and replies aloud. Great for low-literacy.', badge:'Hands-free', accent: 'var(--color-accent)' },
+    { id:'sign', Icon: IVideo, title:'Sign Language', desc:'Show ISL signs to the camera — Dr. Sahayak understands and replies aloud. For deaf patients.', badge:'Accessible', accent: '#7C3AED' },
     { id:'clickable', Icon: ITouch, title:'Guided Touch', desc:'Quiet and simple. Answer by tapping clear, easy options. No mic needed.', badge:'No mic needed', accent: '#0F3A4A' },
   ]
   return (
@@ -270,7 +272,7 @@ function ModeChooser({ onPick }) {
         <p className="mono-label">Step 2 of 2 · Zero-training · You can switch anytime</p>
         <h1 className="display font-[750] tracking-tight leading-[1.05] mt-3" style={{ color:'var(--color-foreground-strong)', fontSize: 'clamp(28px, 3.6vw, 40px)' }}>How would you like to proceed?</h1>
         <p className="text-[15px] leading-relaxed mt-3 max-w-[640px]" style={{ color:'var(--color-muted-foreground)' }}>Pick one — only that interface opens. All three use the same clinical engine and meet DPDP / ABDM safety.</p>
-        <div className="grid md:grid-cols-3 gap-5 md:gap-6 mt-8 max-w-5xl">
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5 md:gap-6 mt-8 max-w-6xl">
           {modes.map(({id,Icon,title,desc,badge,accent})=> (
             <button key={id} onClick={()=>onPick(id)} className="group text-left rounded-[20px] p-6 md:p-7 bg-white border-[1.5px] hover:-translate-y-1 transition-all duration-200 flex flex-col" style={{ borderColor:'var(--color-border)', boxShadow: 'var(--shadow-card)' }}>
               <div className="flex items-center justify-between">
@@ -333,7 +335,7 @@ export default function Interview() {
       if(data.is_assistant && data.assistant_reply){
         setAssistantNote(data.assistant_reply); setTimeout(()=>setAssistantNote(''),8000)
         setMessages(m=>[...m,{role:'assistant', text:data.assistant_reply}])
-        Speech.speak(data.assistant_reply, bcpFor(setup?.consent?.language||'en')).then(()=>{ if(data.question) Speech.speak(data.question.text, bcpFor(setup?.consent?.language||'en')) })
+        if(uiMode!=='sign') Speech.speak(data.assistant_reply, bcpFor(setup?.consent?.language||'en')).then(()=>{ if(data.question) Speech.speak(data.question.text, bcpFor(setup?.consent?.language||'en')) })
         setTurn(data); return
       }
       if(data.red_flag_alert){ setAlertFlag(data.red_flag_alert); setTimeout(()=>setAlertFlag(null),8000)}
@@ -358,7 +360,7 @@ export default function Interview() {
   const q = turn?.question
   const agentId = getAgentId(setup.mode, setup.consent.language || 'en')
   const toggleMulti = (i)=> setMultiSel(s=> s.includes(String(i)) ? s.filter(x=>x!==String(i)) : [...s, String(i)] )
-  const modeLabel = { video:'Video Consultation', chat:'Voice Conversation', clickable:'Guided Touch'}[uiMode]
+  const modeLabel = { video:'Video Consultation', chat:'Voice Conversation', sign:'Sign Language', clickable:'Guided Touch'}[uiMode]
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--color-background)' }}>
@@ -418,6 +420,20 @@ export default function Interview() {
             </div>
             <div className="flex-1 min-h-0">
               <VoiceChat questionText={q?.text} questionId={q?.id} lang={setup.consent.language||'en'} busy={busyTranscribing} sessionId={sessionId} onSpokenAnswer={(text)=> q && applyAnswer({question_id:q.id, text}, text)} onAssistantReply={(txt)=>{ setAssistantNote(txt); setTimeout(()=>setAssistantNote(''),8000)}} />
+            </div>
+            {assistantNote && <div className="mx-4 mb-2 p-3 rounded-xl text-sm" style={{ background:'#E0F2F7', border:'1px solid var(--color-border)', color:'var(--color-foreground)' }}>💬 {assistantNote}</div>}
+            <SubmitBar onSubmit={goFinish} />
+          </div>
+        )}
+
+        {uiMode==='sign' && (
+          <div className="flex-1 min-h-0 flex flex-col panel overflow-hidden">
+            <div className="px-4 md:px-5 py-3 text-xs border-b flex items-center justify-between" style={{ borderColor:'var(--color-border)', color:'var(--color-faint)' }}>
+              <span className="font-medium">Sign — show ISL sign, hold 1 sec, Dr. Sahayak replies</span>
+              <span className="hidden sm:inline tabular-nums font-semibold" style={{ color:'var(--color-muted-foreground)' }}>{Object.keys(turn?.state?.answers||{}).length} answered</span>
+            </div>
+            <div className="flex-1 min-h-0">
+              <SignMode questionText={q?.text} questionId={q?.id} lang={setup.consent.language||'en'} sessionId={sessionId} announceText={assistantNote} onSignAnswer={(text, gloss)=> q && applyAnswer({question_id:q.id, text}, `[Sign: ${gloss}] ${text}`)} />
             </div>
             {assistantNote && <div className="mx-4 mb-2 p-3 rounded-xl text-sm" style={{ background:'#E0F2F7', border:'1px solid var(--color-border)', color:'var(--color-foreground)' }}>💬 {assistantNote}</div>}
             <SubmitBar onSubmit={goFinish} />

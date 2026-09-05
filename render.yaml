@@ -11,3 +11,5 @@ services:
         sync: false
       - key: BEY_API_KEY
         sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://venerable-selkie-bda1c2.netlify.app,https://mediliosk.onrender.com

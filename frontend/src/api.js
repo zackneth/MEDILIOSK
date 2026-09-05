@@ -20,5 +20,7 @@ export const getDocumentsTimeline = (sessionId) => api.get(`/documents/${session
 export const getDocumentsReport = (sessionId) => api.get(`/documents/${sessionId}/report-json`)
 export const downloadReportPdf = (sessionId) => api.get(`/documents/${sessionId}/report-pdf`, { responseType: 'blob' })
 export const getConsentNotice = (language) => api.get('/consent/notice', { params: { language } })
+export const normalizeSign = (label) => api.post('/sign/normalize', { label })
+export const getSignVocabulary = () => api.get('/sign/vocabulary')
 
 export default api

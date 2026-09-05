@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
-from app.routers import bey_bridge, consent, documents, interactions, interview, mock_his, stt, summary, voice
+from app.routers import bey_bridge, consent, documents, interactions, interview, mock_his, sign, stt, summary, voice
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("medikiosk")
@@ -49,6 +49,7 @@ app.include_router(summary.router)
 app.include_router(consent.router)
 app.include_router(mock_his.router)
 app.include_router(bey_bridge.router)
+app.include_router(sign.router)
 app.include_router(stt.router)
 app.include_router(voice.router)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
