@@ -54,7 +54,7 @@ export default function VoiceChat({ questionText, questionId, lang, busy, sessio
               Speech.speak(questionTextRef.current||questionText, bcp).then(()=>{ if(activeRef.current) setTimeout(startListening,300)})
               return
             }
-            const APP_RE = /(medikiosk|kiosk|app|privacy|consent|abha|abdm|fhir|data.*store|dpdp|ayush|scan|report|summary|his|hospital|side effect|medicine|explain|help me|i don.?t understand)/i
+            const APP_RE = /(instadoc|medikiosk|kiosk|app|privacy|consent|abdm|fhir|data.*store|dpdp|ayush|scan|report|summary|his|hospital|side effect|medicine|explain|help me|i don.?t understand)/i
             const QUESTION_RE2 = /\?|^(what|why|how|where|when|who|which|can you|can i|could you|tell me|explain|help|is this|are you|do you|will you|aap|yeh kya|ye kya|kaise|kya hai|samjhao|batao|i want|i need|please)/i
             const maybeAssistant = data.text && data.text.trim().split(/\s+/).length >= 3 && (/\?/.test(data.text) || QUESTION_RE2.test(data.text) || APP_RE.test(data.text))
             if(maybeAssistant && sessionId){

@@ -17,23 +17,23 @@ export default function Consent(){
   const nav=useNavigate()
   const [lang,setLang]=useState('en'); const [notice,setNotice]=useState(null)
   const [grants,setGrants]=useState({history_capture:false, document_digitization:false, share_with_physician:false})
-  const [abha,setAbha]=useState(''); const [name,setName]=useState(''); const [age,setAge]=useState(''); const [sex,setSex]=useState('male'); const [mode,setMode]=useState('allopathic')
+  const [name,setName]=useState(''); const [age,setAge]=useState(''); const [sex,setSex]=useState('male'); const [mode,setMode]=useState('allopathic')
   const loadNotice=async(l)=>{ setLang(l); try{ const {data}=await getConsentNotice(l); setNotice(data); Speech.speak(data.points.join('. '), bcpFor(l)) }catch{ setNotice(null)} }
-  const canProceed=grants.history_capture && abha.trim().length>=4 && name.trim()
-  const proceed=()=> nav('/interview',{state:{identity:{abha_id:abha, name, age:Number(age)||null, sex}, consent:{...grants, language:lang, granted_at:new Date().toISOString(), revoked:false}, mode}})
+  const canProceed=grants.history_capture && name.trim()
+  const proceed=()=> nav('/interview',{state:{identity:{abha_id:null, name, age:Number(age)||null, sex}, consent:{...grants, language:lang, granted_at:new Date().toISOString(), revoked:false}, mode}})
 
   return (
     <div className="min-h-screen bg-[var(--color-background)]">
       <div className="w-full bg-white border-b" style={{borderColor:'var(--color-border)'}}>
         <div className="kiosk-shell flex items-center gap-3 py-4">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{background:'var(--color-primary)', color:'white'}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" strokeLinecap="round"/></svg></div>
-          <span className="display text-lg font-bold" style={{color:'var(--color-foreground-strong)'}}>MediKiosk</span>
+          <span className="display text-lg font-bold" style={{color:'var(--color-foreground-strong)'}}>InstaDoc</span>
           <span className="hidden sm:inline text-xs font-medium" style={{color:'var(--color-faint)'}}>· Your data, your consent</span>
         </div>
       </div>
       <div className="kiosk-shell max-w-xl mx-auto py-8">
         <h1 className="display text-2xl font-semibold" style={{color:'var(--color-foreground-strong)'}}>Consent & Identity</h1>
-        <p className="text-sm mt-1" style={{color:'var(--color-muted-foreground)'}}>Choose language, confirm consent, and identify via ABHA.</p>
+        <p className="text-sm mt-1" style={{color:'var(--color-muted-foreground)'}}>Choose language, confirm consent, and enter your details.</p>
 
         <div className="panel p-6 mt-6 space-y-6">
           <div>
@@ -48,7 +48,6 @@ export default function Consent(){
           </div>
 
           <div className="space-y-3">
-            <div><label className="text-xs font-semibold" style={{color:'var(--color-foreground-strong)'}}>ABHA ID *</label><input value={abha} onChange={(e)=>setAbha(e.target.value)} placeholder="12-3456-7890-1234" className="field mt-1.5" /></div>
             <div><label className="text-xs font-semibold" style={{color:'var(--color-foreground-strong)'}}>Full name *</label><input value={name} onChange={(e)=>setName(e.target.value)} placeholder="e.g. Aarav Sharma" className="field mt-1.5" /></div>
             <div className="flex gap-3">
               <div className="flex-1"><label className="text-xs font-semibold" style={{color:'var(--color-foreground-strong)'}}>Age</label><input value={age} onChange={(e)=>setAge(e.target.value)} type="number" placeholder="32" className="field mt-1.5" /></div>

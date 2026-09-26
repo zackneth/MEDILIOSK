@@ -63,7 +63,6 @@ function StartGate({ onBegin }) {
   const [name, setName] = useState('')
   const [age, setAge] = useState('')
   const [sex, setSex] = useState('male')
-  const [abha, setAbha] = useState('')
   const [mode, setMode] = useState('allopathic')
   const [consent, setConsent] = useState({ history_capture: false, document_digitization: false, share_with_physician: false })
   const [playingAudio, setPlayingAudio] = useState(false)
@@ -92,9 +91,9 @@ function StartGate({ onBegin }) {
         <div className="kiosk-shell flex items-center justify-between py-3.5">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" style={{ background: 'var(--color-foreground-strong)', color: 'white' }}><IPlus className="w-5 h-5" /></div>
-            <span className="display text-[18px] font-[750] tracking-tight" style={{ color: 'var(--color-foreground-strong)' }}>MediKiosk</span>
+            <span className="display text-[18px] font-[750] tracking-tight" style={{ color: 'var(--color-foreground-strong)' }}>InstaDoc</span>
             <span className="hidden lg:inline-flex items-center gap-2 ml-3 pl-3 border-l text-[11px] font-bold tracking-widest uppercase" style={{ borderColor: 'var(--color-border)', color: 'var(--color-faint)' }}>
-              <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-accent)' }} /> SIH26047 · Ministry of Ayush
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-accent)' }} /> Student Innovation HealthTech
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -116,7 +115,7 @@ function StartGate({ onBegin }) {
 
             <h1 className="display font-[800] leading-[0.96] tracking-[-0.035em] mt-6" style={{ color: 'var(--color-foreground-strong)', fontSize: 'clamp(32px, 4.2vw, 46px)' }}>
               Welcome to<br />
-              <span style={{ color: 'var(--color-primary)' }}>MediKiosk</span>
+              <span style={{ color: 'var(--color-primary)' }}>InstaDoc</span>
               <span className="font-[400] tracking-[-0.02em]" style={{ color: 'var(--color-foreground)' }}>.</span>
             </h1>
 
@@ -146,7 +145,7 @@ function StartGate({ onBegin }) {
               {[
                 ['Voice + Touch', 'Speak or tap — resilient in noise'],
                 ['Scan reports', 'Cursive handwriting, HI/EN'],
-                ['FHIR to HIS', 'ABHA-linked, auto-purged'],
+                ['FHIR to HIS', 'Secure, auto-purged'],
               ].map(([t,d]) => (
                 <div key={t} className="rounded-2xl p-4 group hover:-translate-y-[1px] transition-all" style={{ background: 'white', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-soft)' }}>
                   <p className="text-[13px] font-[700] tracking-tight" style={{ color: 'var(--color-foreground-strong)' }}>{t}</p>
@@ -195,7 +194,7 @@ function StartGate({ onBegin }) {
                   <label className="text-xs font-semibold" style={{ color:'var(--color-foreground-strong)' }} htmlFor="mk-name">Full name <span style={{color:'var(--color-destructive)'}}>*</span></label>
                   <input id="mk-name" value={name} onChange={(e)=>setName(e.target.value)} placeholder={lang==='hi' ? 'पूरा नाम' : 'e.g. Aarav Sharma'} className="field mt-1.5" autoComplete="name" />
                 </div>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs font-semibold" style={{ color:'var(--color-foreground-strong)' }}>Age</label>
                     <input value={age} onChange={(e)=>setAge(e.target.value)} type="number" placeholder="32" className="field mt-1.5" />
@@ -203,10 +202,6 @@ function StartGate({ onBegin }) {
                   <div>
                     <label className="text-xs font-semibold" style={{ color:'var(--color-foreground-strong)' }}>Sex</label>
                     <select value={sex} onChange={(e)=>setSex(e.target.value)} className="field mt-1.5"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select>
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold" style={{ color:'var(--color-foreground-strong)' }}>ABHA ID</label>
-                    <input value={abha} onChange={(e)=>setAbha(e.target.value)} placeholder="12-3456-..." className="field mt-1.5" />
                   </div>
                 </div>
               </div>
@@ -235,7 +230,7 @@ function StartGate({ onBegin }) {
               <button disabled={!canBegin} onClick={()=>{
                 Speech.stop()
                 onBegin({
-                  identity:{ abha_id:abha.trim()||null, aadhaar_last4:null, name:name.trim(), age:Number(age)||null, sex, is_new_registration:!abha.trim() },
+                  identity:{ abha_id:null, aadhaar_last4:null, name:name.trim(), age:Number(age)||null, sex, is_new_registration:true },
                   consent:{ ...consent, language:lang, granted_at:new Date().toISOString(), revoked:false },
                   mode,
                 })
@@ -264,7 +259,7 @@ function ModeChooser({ onPick }) {
       <div className="relative w-full glass-header">
         <div className="kiosk-shell flex items-center gap-3 py-4">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background:'var(--color-foreground-strong)', color:'white' }}><IPlus className="w-5 h-5" /></div>
-          <span className="display text-lg font-bold" style={{ color: 'var(--color-foreground-strong)' }}>MediKiosk</span>
+          <span className="display text-lg font-bold" style={{ color: 'var(--color-foreground-strong)' }}>InstaDoc</span>
           <span className="hidden sm:inline text-xs font-medium ml-2 pl-3 border-l" style={{ borderColor:'var(--color-border)', color:'var(--color-faint)' }}>Choose your comfort</span>
         </div>
       </div>
@@ -368,7 +363,7 @@ export default function Interview() {
         <div className="kiosk-shell flex items-center justify-between py-3.5">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background:'var(--color-primary)', color:'white' }}><IPlus className="w-4 h-4" /></div>
-            <span className="display font-bold text-[16px] shrink-0" style={{ color:'var(--color-foreground-strong)' }}>MediKiosk</span>
+            <span className="display font-bold text-[16px] shrink-0" style={{ color:'var(--color-foreground-strong)' }}>InstaDoc</span>
             <span className="hidden md:inline text-xs truncate" style={{ color:'var(--color-muted-foreground)' }}>· {setup.identity.name} · {modeLabel}{setup.mode==='ayush'?' · AYUSH':''}</span>
           </div>
           <div className="flex items-center gap-3">

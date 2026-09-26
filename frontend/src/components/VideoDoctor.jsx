@@ -28,7 +28,7 @@ export default function VideoDoctor({ sessionId }) {
         className="w-full h-full"
         allow="camera *; microphone *; fullscreen; autoplay; clipboard-write"
         onLoad={() => setLoaded(true)}
-        title="MediKiosk Digital Doctor"
+        title="InstaDoc Digital Doctor"
       />
       {!loaded && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-slate-900">

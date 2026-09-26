@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { API_BASE } from '../api'
 import Speech from '../speech'
 
-// Lightweight ISL -> text for MediKiosk.
+// Lightweight ISL -> text for InstaDoc.
 // Landmarks run 100% in-browser via MediaPipe Tasks Vision (no Python, no GPU).
 // Classification v1 = finger-count templates + hold-to-confirm + manual tap fallback
 // (demo-safe on a kiosk in 2 days). Result text goes to the interview engine

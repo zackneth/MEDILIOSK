@@ -21,7 +21,7 @@ export default function Doctor() {
       .catch(()=> api.get(`/summary/archived/${sessionId}`).then(({data})=>setSummary(data)).catch(()=>setStatus('missing')))
   }, [sessionId])
   const handleDownloadPdf = async()=>{
-    try{ const {data}=await downloadReportPdf(sessionId); const url=URL.createObjectURL(data); const a=document.createElement('a'); a.href=url; a.download=`MediKiosk_DoctorReport_${sessionId.slice(0,8)}.pdf`; a.click(); URL.revokeObjectURL(url)}catch{ alert('PDF download failed')}
+    try{ const {data}=await downloadReportPdf(sessionId); const url=URL.createObjectURL(data); const a=document.createElement('a'); a.href=url; a.download=`InstaDoc_DoctorReport_${sessionId.slice(0,8)}.pdf`; a.click(); URL.revokeObjectURL(url)}catch{ alert('PDF download failed')}
   }
 
   if(status==='missing'){

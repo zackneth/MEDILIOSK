@@ -1,10 +1,10 @@
-# MediKiosk — SIH26047
+# InstaDoc (formerly MediKiosk — SIH26047)
 
 AI-powered clinical history platform with a live talking AI doctor. Smart India Hackathon 2026, PS SIH26047 (Ministry of Ayush — Patient Case-Taking Software).
 
 ## What it does
 A patient walks into an OPD kiosk and:
-1. **Identifies** (name/ABHA) + gives **audio-guided DPDP/ABDM consent** in English or Hindi
+1. **Identifies** (name) + gives **audio-guided DPDP/ABDM consent** in English or Hindi
 2. **Talks to Dr. Sahayak** — a real-time photoreal video avatar conducting a structured clinical history (SOCRATES adaptive questioning; AYUSH Dashavidha Pariksha mode available)
 3. Red-flag symptoms (radiating chest pain, stroke signs) trigger an instant priority triage alert
 4. **Scans old prescriptions/lab reports** → Gemini vision OCR extracts diagnoses, medications, lab values → chronological timeline + abnormal-value + drug-interaction flags

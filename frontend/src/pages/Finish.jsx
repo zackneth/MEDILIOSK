@@ -21,7 +21,7 @@ export default function Finish() {
   useEffect(()=>{ if(!sessionId) return; getInteractions(sessionId).then(({data})=>setInteractions(data)).catch(()=>{}) },[docs.length, sessionId])
   useEffect(()=>{ if(!sessionId || docs.length===0) return; getDocumentsReport(sessionId).then(({data})=>setReport(data)).catch(()=>{}) },[docs.length, sessionId])
   const handleDownloadPdf = async()=>{
-    try{ const {data}=await downloadReportPdf(sessionId); const url=URL.createObjectURL(data); const a=document.createElement('a'); a.href=url; a.download=`MediKiosk_Report_${sessionId.slice(0,8)}.pdf`; a.click(); URL.revokeObjectURL(url)}catch{ alert('PDF download failed - no documents?')}
+    try{ const {data}=await downloadReportPdf(sessionId); const url=URL.createObjectURL(data); const a=document.createElement('a'); a.href=url; a.download=`InstaDoc_Report_${sessionId.slice(0,8)}.pdf`; a.click(); URL.revokeObjectURL(url)}catch{ alert('PDF download failed - no documents?')}
   }
   const runSummary=async()=>{
     if(!sessionId||summarizing) return
@@ -48,7 +48,7 @@ export default function Finish() {
         <div className="kiosk-shell flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:'var(--color-primary)', color:'white'}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14"/></svg></div>
-            <span className="display font-bold" style={{color:'var(--color-foreground-strong)'}}>MediKiosk <span style={{color:'var(--color-faint)'}}>· Session summary</span></span>
+            <span className="display font-bold" style={{color:'var(--color-foreground-strong)'}}>InstaDoc <span style={{color:'var(--color-faint)'}}>· Session summary</span></span>
           </div>
           <span className="mono-label hidden sm:inline">{sessionId}</span>
         </div>

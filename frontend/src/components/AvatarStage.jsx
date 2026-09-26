@@ -21,7 +21,7 @@ export default function AvatarStage({ speechText, sessionId }) {
   const launchPopup = () => {
     window.open(
       BEY_URL,
-      'MediKioskDoctor',
+      'InstaDocDoctor',
       'width=480,height=720,left=100,top=80',
     )
   }
@@ -53,7 +53,7 @@ export default function AvatarStage({ speechText, sessionId }) {
           height="100%"
           allow="camera; microphone; fullscreen; autoplay"
           style={{ border: 'none' }}
-          title="MediKiosk Digital Doctor"
+          title="InstaDoc Digital Doctor"
         />
         <button
           onClick={() => setMode('voice')}
